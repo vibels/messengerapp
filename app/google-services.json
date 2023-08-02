@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "971866970937",
+    "project_id": "freeuni-spoli18",
+    "storage_bucket": "freeuni-spoli18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971866970937:android:9091c715fc5d16489766e8",
+        "android_client_info": {
+          "package_name": "ge.spoli.messagingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "971866970937-mv77r2vkgdlubfp2r3qpileq8o3bddud.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCq8h-e0Xmr5FuWDcJL9DHXBKMSzej1ocY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "971866970937-mv77r2vkgdlubfp2r3qpileq8o3bddud.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
