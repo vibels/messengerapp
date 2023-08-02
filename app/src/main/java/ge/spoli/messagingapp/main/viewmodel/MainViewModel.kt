@@ -1,15 +1,17 @@
-package ge.spoli.messagingapp.presentation
+package ge.spoli.messagingapp.main.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.*
-import ge.spoli.messagingapp.data.UserDatabase
-import ge.spoli.messagingapp.data.UserEntity
-import ge.spoli.messagingapp.domain.UserRepository
-import ge.spoli.messagingapp.domain.UserRepositoryImpl
+import ge.spoli.messagingapp.user.domain.UserEntity
+import ge.spoli.messagingapp.user.model.UserRepository
+import ge.spoli.messagingapp.user.model.UserRepositoryImpl
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
+class MainViewModel : ViewModel() {
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     private var _testLiveData = MutableLiveData<List<UserEntity>>()
     val testLiveData: LiveData<List<UserEntity>> get() = _testLiveData
@@ -34,10 +36,6 @@ class MainViewModel @Inject constructor(private val userRepository: UserReposito
 
 class MainViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel(
-            UserRepositoryImpl(
-                UserDatabase.getInstance(context).getUserDao()
-            )
-        ) as T
+        return MainViewModel() as T
     }
 }
