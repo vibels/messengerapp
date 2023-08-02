@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">MessagingApp</string>
+    <string name="avatar_desc">User avatar picture</string>
+    <string name="username">Enter your nickname</string>
+    <string name="password">Enter your password</string>
+    <string name="job_info">What I do</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="register">Not registered?</string>
+    <string name="back_login">Go back to login</string>
+    <string name="back">BACK</string>
 </resources>

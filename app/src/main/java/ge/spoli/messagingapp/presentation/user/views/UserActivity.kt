@@ -1,18 +1,10 @@
-package ge.spoli.messagingapp.user.views
+package ge.spoli.messagingapp.presentation.user.views
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import ge.spoli.messagingapp.databinding.ActivityUsersBinding
-import ge.spoli.messagingapp.user.viewmodel.UserViewModel
 
 class UserActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels {
-        UserViewModel.getViewModelFactory(
-            applicationContext
-        )
-    }
-
     private lateinit var binding: ActivityUsersBinding
 
 
@@ -34,9 +26,4 @@ class UserActivity : AppCompatActivity() {
 
     }
 
-    private fun listenToLiveData() {
-        viewModel.testLiveData.observe(this) {
-
-        }
-    }
 }

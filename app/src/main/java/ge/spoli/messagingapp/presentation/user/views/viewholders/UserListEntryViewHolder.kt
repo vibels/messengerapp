@@ -1,10 +1,10 @@
-package ge.spoli.messagingapp.user.views.viewholders
+package ge.spoli.messagingapp.presentation.user.views.viewholders
 
 import androidx.recyclerview.widget.RecyclerView
-import ge.spoli.messagingapp.chat.views.ChatActivity
+import ge.spoli.messagingapp.presentation.chat.views.ChatActivity
 import ge.spoli.messagingapp.databinding.UserListEntryBinding
-import ge.spoli.messagingapp.user.domain.UserEntity
-import ge.spoli.messagingapp.user.views.UserActivity
+import ge.spoli.messagingapp.domain.user.UserEntity
+import ge.spoli.messagingapp.presentation.user.views.UserActivity
 
 class UserListEntryViewHolder(
     private var binding: UserListEntryBinding

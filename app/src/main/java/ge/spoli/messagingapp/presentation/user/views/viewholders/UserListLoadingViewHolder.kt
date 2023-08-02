@@ -1,4 +1,4 @@
-package ge.spoli.messagingapp.user.views.viewholders
+package ge.spoli.messagingapp.presentation.user.views.viewholders
 
 import androidx.recyclerview.widget.RecyclerView
 import ge.spoli.messagingapp.databinding.UserListLoadingBinding

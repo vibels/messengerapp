@@ -1,7 +1,7 @@
-package ge.spoli.messagingapp.chat.views
+package ge.spoli.messagingapp.presentation.chat.views
 
 import androidx.appcompat.app.AppCompatActivity
-import ge.spoli.messagingapp.user.views.UserActivity
+import ge.spoli.messagingapp.presentation.user.views.UserActivity
 
 class ChatActivity : AppCompatActivity() {
     companion object {

@@ -1,13 +1,13 @@
-package ge.spoli.messagingapp.user.viewmodel
+package ge.spoli.messagingapp.presentation.main.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.*
-import ge.spoli.messagingapp.user.domain.UserEntity
-import ge.spoli.messagingapp.user.model.UserRepository
+import ge.spoli.messagingapp.domain.user.UserEntity
+import ge.spoli.messagingapp.presentation.user.model.UserRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class UserViewModel : ViewModel() {
+class MainViewModel : ViewModel() {
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -17,8 +17,8 @@ class UserViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            val list = userRepository.getUserItemsList()
-            _testLiveData.value = list
+//            val list = userRepository.getUserItemsList()
+//            _testLiveData.value = list
         }
     }
 
@@ -27,15 +27,14 @@ class UserViewModel : ViewModel() {
     }
 
     companion object {
-        fun getViewModelFactory(context: Context): UserViewModelFactory {
-            return UserViewModelFactory(context)
+        fun getViewModelFactory(context: Context): MainViewModelFactory {
+            return MainViewModelFactory(context)
         }
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-class UserViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+class MainViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return UserViewModel() as T
+        return MainViewModel() as T
     }
 }

@@ -1,4 +1,4 @@
-package ge.spoli.messagingapp.user.views
+package ge.spoli.messagingapp.presentation.user.views
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ge.spoli.messagingapp.common.Constants
 import ge.spoli.messagingapp.databinding.UserListEntryBinding
 import ge.spoli.messagingapp.databinding.UserListLoadingBinding
-import ge.spoli.messagingapp.user.domain.UserEntity
-import ge.spoli.messagingapp.user.views.viewholders.UserListEntryViewHolder
-import ge.spoli.messagingapp.user.views.viewholders.UserListLoadingViewHolder
+import ge.spoli.messagingapp.domain.user.UserEntity
+import ge.spoli.messagingapp.presentation.user.views.viewholders.UserListEntryViewHolder
+import ge.spoli.messagingapp.presentation.user.views.viewholders.UserListLoadingViewHolder
 
 class UserListViewAdapter(private var userActivity: UserActivity): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

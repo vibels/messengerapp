@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "971866970937",
-    "project_id": "freeuni-spoli18",
-    "storage_bucket": "freeuni-spoli18.appspot.com"
+    "project_number": "261206344811",
+    "firebase_url": "https://messagingapp-ca661-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "messagingapp-ca661",
+    "storage_bucket": "messagingapp-ca661.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:971866970937:android:9091c715fc5d16489766e8",
+        "mobilesdk_app_id": "1:261206344811:android:80690340f7719a767b1d2e",
         "android_client_info": {
           "package_name": "ge.spoli.messagingapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "971866970937-mv77r2vkgdlubfp2r3qpileq8o3bddud.apps.googleusercontent.com",
+          "client_id": "261206344811-n7r3g8443rthjqu2gkubpnhd4pdpr07e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCq8h-e0Xmr5FuWDcJL9DHXBKMSzej1ocY"
+          "current_key": "AIzaSyD-HBfPmiASjWLb8Vpe2gga1RONHJXAJIE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "971866970937-mv77r2vkgdlubfp2r3qpileq8o3bddud.apps.googleusercontent.com",
+              "client_id": "261206344811-n7r3g8443rthjqu2gkubpnhd4pdpr07e.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

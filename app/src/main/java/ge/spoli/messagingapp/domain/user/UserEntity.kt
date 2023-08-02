@@ -1,10 +1,10 @@
-package ge.spoli.messagingapp.user.domain
+package ge.spoli.messagingapp.domain.user
 
 import androidx.annotation.Keep
 
 @Keep
 data class UserEntity(
-    val id: Int = 0,
+    val id: String,
     val username: String,
     val jobInfo: String,
     val profile: String,
