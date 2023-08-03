@@ -10,9 +10,21 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>
 
+    <style name="BottomAppBarOverlay">
+        <item name="colorControlNormal">@color/navigation_bar_color</item>
+    </style>
+
     <style name="Theme.MessagingApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.MessagingApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomNavigationView" parent="">
+        <item name="colorOnPrimary">@android:color/transparent</item>
+    </style>
 
     <style name="Theme.MessagingApp.NoActionBar">
         <item name="windowActionBar">false</item>

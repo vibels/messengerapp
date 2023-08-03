@@ -2,10 +2,10 @@
 <resources>
     <dimen name="login_image_layout_width">150dp</dimen>
     <dimen name="login_image_layout_height">150dp</dimen>
-    <dimen name="login_image_margin_top">100dp</dimen>
+    <dimen name="login_image_margin_top">95dp</dimen>
     <dimen name="login_image_corner">75dp</dimen>
-    <dimen name="username_height">40dp</dimen>
-    <dimen name="username_radius">20dp</dimen>
+    <dimen name="username_height">36dp</dimen>
+    <dimen name="username_radius">18dp</dimen>
     <dimen name="dimen_xxs">6dp</dimen>
     <dimen name="dimen_xs">12dp</dimen>
     <dimen name="dimen_s">18dp</dimen>
@@ -13,10 +13,13 @@
     <dimen name="dimen_l">30dp</dimen>
     <dimen name="dimen_xl">36dp</dimen>
     <dimen name="dimen_xxl">42dp</dimen>
-    <dimen name="login_button_width">100dp</dimen>
+    <dimen name="login_button_width">95dp</dimen>
     <dimen name="login_button_height">35dp</dimen>
-    <dimen name="register_button_width">100dp</dimen>
+    <dimen name="register_button_width">95dp</dimen>
     <dimen name="register_button_height">35dp</dimen>
     <dimen name="background_blue_radius">5dp</dimen>
+    <dimen name="navigation_bar_height">55dp</dimen>
+    <dimen name="navigation_bar_margin">55dp</dimen>
     <dimen name="button_text">18sp</dimen>
+    <dimen name="margin_nav_bar">100dp</dimen>
 </resources>

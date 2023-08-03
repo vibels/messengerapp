@@ -9,4 +9,7 @@
     <string name="register">Not registered?</string>
     <string name="back_login">Go back to login</string>
     <string name="back">BACK</string>
+    <string name="home_button">HOME</string>
+    <string name="profile_button">PROFILE</string>
+    <string name="floating_desc">Floating button for chat</string>
 </resources>
