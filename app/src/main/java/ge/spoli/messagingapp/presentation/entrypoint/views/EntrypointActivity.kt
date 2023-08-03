@@ -38,21 +38,18 @@ class EntrypointActivity : AppCompatActivity() {
         }
         entryViewModel.entryStatus.observe(this) {
             if (it != null) {
+                setLoading(false)
                 startMainActivity()
             }
         }
 
         val currentUser = Firebase.auth.currentUser
         if (currentUser != null) {
+            setLoading(true)
             logUserWithId(currentUser.uid)
         }
 
         setup()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setLoading(false)
     }
 
     private fun setup() {
@@ -69,8 +66,8 @@ class EntrypointActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            logIn(username, password)
             setLoading(true)
+            logIn(username, password)
         }
 
         binding.signUpButton.setOnClickListener {

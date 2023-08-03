@@ -1,5 +1,6 @@
 package ge.spoli.messagingapp.presentation.main.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Suppress("MemberVisibilityCanBePrivate")
 @HiltViewModel
 class MainViewModel @Inject constructor(val userRepository: UserRepository): ViewModel() {
     private var _loggedUser = MutableLiveData<UserEntity>()
@@ -35,9 +37,10 @@ class MainViewModel @Inject constructor(val userRepository: UserRepository): Vie
         }
     }
 
-    fun updateUserInfo(username: String, jobInfo: String, profile: String) {
+    fun updateUserInfo(username: String, jobInfo: String, profile: String? = null, data: Uri? = null) {
         viewModelScope.launch {
-            userRepository.updateUser(username, jobInfo, profile, ::setLoggedUser, ::setError)
+            delay(500)
+            userRepository.updateUser(username, jobInfo, profile, data, ::setLoggedUser, ::setError)
         }
     }
 

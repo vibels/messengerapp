@@ -1,6 +1,7 @@
 package ge.spoli.messagingapp.presentation.user.model
 
 
+import android.net.Uri
 import ge.spoli.messagingapp.domain.user.UserEntity
 
 interface UserRepository {
@@ -10,7 +11,8 @@ interface UserRepository {
     fun updateUser(
         username: String,
         jobInfo: String,
-        profile: String,
+        profile: String? = null,
+        data: Uri? = null,
         setResult: (user: UserEntity) -> Unit,
         setError: (error: String) -> Unit
     )

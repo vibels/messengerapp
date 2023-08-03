@@ -70,6 +70,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.squareup.picasso:picasso:2.5.2")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
     kapt("com.github.bumptech.glide:compiler:4.12.0")
