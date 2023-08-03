@@ -22,4 +22,5 @@
     <dimen name="navigation_bar_margin">55dp</dimen>
     <dimen name="button_text">18sp</dimen>
     <dimen name="margin_nav_bar">100dp</dimen>
+    <dimen name="profile_default_radius">75dp</dimen>
 </resources>

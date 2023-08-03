@@ -1,40 +1,45 @@
 package ge.spoli.messagingapp.presentation.main.viewmodel
 
-import android.content.Context
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.spoli.messagingapp.domain.user.UserEntity
 import ge.spoli.messagingapp.presentation.user.model.UserRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(val userRepository: UserRepository): ViewModel() {
+    private var _loggedUser = MutableLiveData<UserEntity>()
+    private var _mainViewError = MutableLiveData<String>()
 
-    @Inject
-    lateinit var userRepository: UserRepository
+    val loggedUser: LiveData<UserEntity> get() = _loggedUser
+    val mainViewError: LiveData<String> get() = _mainViewError
 
-    private var _testLiveData = MutableLiveData<List<UserEntity>>()
-    val testLiveData: LiveData<List<UserEntity>> get() = _testLiveData
 
-    init {
+    private fun setLoggedUser(user: UserEntity) {
+        _loggedUser.postValue(user)
+    }
+
+    private fun setError(error: String) {
+        _mainViewError.postValue(error)
+    }
+
+    fun fillLoggedUser() {
         viewModelScope.launch {
-//            val list = userRepository.getUserItemsList()
-//            _testLiveData.value = list
+            delay(500)
+            userRepository.getUser(::setLoggedUser, ::setError)
         }
     }
 
-    fun changeData() {
-        // _testLiveData.postValue(DemoEntity(title = "title", description = "desc"))
-    }
-
-    companion object {
-        fun getViewModelFactory(context: Context): MainViewModelFactory {
-            return MainViewModelFactory(context)
+    fun updateUserInfo(username: String, jobInfo: String, profile: String) {
+        viewModelScope.launch {
+            userRepository.updateUser(username, jobInfo, profile, ::setLoggedUser, ::setError)
         }
     }
-}
 
-class MainViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel() as T
-    }
+
 }

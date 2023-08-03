@@ -12,4 +12,7 @@
     <string name="home_button">HOME</string>
     <string name="profile_button">PROFILE</string>
     <string name="floating_desc">Floating button for chat</string>
+    <string name="profile_picture">Picture for profile</string>
+    <string name="update">UPDATE</string>
+    <string name="sign_out">SIGN OUT</string>
 </resources>

@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.spoli.messagingapp.common.Constants
 import ge.spoli.messagingapp.presentation.entrypoint.views.EntrypointActivity
 import ge.spoli.messagingapp.presentation.user.model.UserRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,11 +26,12 @@ class EntryViewModel @Inject constructor(val userRepository: UserRepository): Vi
     }
 
     private fun setError(error: String) {
-        _entrypointError.value = error
+        _entrypointError.postValue(error)
     }
 
     private fun getUser(id: String) {
         viewModelScope.launch {
+            delay(500)
             userRepository.fetchUser(id, ::setEntryStatus, ::setError)
         }
     }
@@ -68,7 +70,7 @@ class EntryViewModel @Inject constructor(val userRepository: UserRepository): Vi
     }
 
     fun login(username: String, password: String, activity: EntrypointActivity) {
-            Firebase.auth.signInWithEmailAndPassword("$username@messenger.app", password)
+            Firebase.auth.signInWithEmailAndPassword("$username@dummy.email", password)
                 .addOnCompleteListener(activity) { task ->
                     if (task.isSuccessful) {
                         Firebase.auth.currentUser?.uid?.let {
