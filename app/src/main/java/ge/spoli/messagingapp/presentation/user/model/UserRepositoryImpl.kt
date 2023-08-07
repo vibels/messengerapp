@@ -61,8 +61,10 @@ class UserRepositoryImpl : UserRepository {
         }
     }
 
-    override fun signOut() {
+    override fun signOut(setResult: (user: UserEntity?) -> Unit,
+                         setError: (error: String) -> Unit) {
         user = null
+        setResult(null)
     }
 
     private fun continueUpdate(username: String, jobInfo: String, profile: String, setResult: (user: UserEntity) -> Unit, setError: (error: String) -> Unit) {

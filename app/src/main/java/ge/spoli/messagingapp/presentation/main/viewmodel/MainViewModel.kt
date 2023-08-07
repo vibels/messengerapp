@@ -15,14 +15,14 @@ import javax.inject.Inject
 @Suppress("MemberVisibilityCanBePrivate")
 @HiltViewModel
 class MainViewModel @Inject constructor(val userRepository: UserRepository): ViewModel() {
-    private var _loggedUser = MutableLiveData<UserEntity>()
+    private var _loggedUser = MutableLiveData<UserEntity?>()
     private var _mainViewError = MutableLiveData<String>()
 
-    val loggedUser: LiveData<UserEntity> get() = _loggedUser
+    val loggedUser: LiveData<UserEntity?> get() = _loggedUser
     val mainViewError: LiveData<String> get() = _mainViewError
 
 
-    private fun setLoggedUser(user: UserEntity) {
+    private fun setLoggedUser(user: UserEntity?) {
         _loggedUser.postValue(user)
     }
 
@@ -47,7 +47,7 @@ class MainViewModel @Inject constructor(val userRepository: UserRepository): Vie
     fun sign_out() {
         viewModelScope.launch {
             delay(500)
-            userRepository.signOut()
+            userRepository.signOut(::setLoggedUser, ::setError)
         }
     }
 

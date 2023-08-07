@@ -53,10 +53,12 @@ class ProfileFragment : Fragment() {
             }
         }
         mainViewModel.loggedUser.observe(viewLifecycleOwner) {
-            if (it.id.isNotEmpty()) {
+            if (it?.id?.isNotEmpty() == true) {
                 tempUrl = it.profile
                 setLoading(false)
                 loggedUserUpdated(it)
+            } else if (it == null) {
+                logout()
             }
         }
         setLoading(true)
@@ -82,7 +84,7 @@ class ProfileFragment : Fragment() {
         }
         binding.signOutButton.setOnClickListener {
             Firebase.auth.signOut()
-            logout()
+            mainViewModel.sign_out()
         }
 
         binding.jobInfo.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
@@ -160,7 +162,6 @@ class ProfileFragment : Fragment() {
 
     private fun logout() {
         requireActivity().finish()
-        mainViewModel.sign_out()
     }
 
     private fun loggedUserUpdated(user: UserEntity) {

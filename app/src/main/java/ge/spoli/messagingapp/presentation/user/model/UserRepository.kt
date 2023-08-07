@@ -17,5 +17,5 @@ interface UserRepository {
         setError: (error: String) -> Unit
     )
 
-    fun signOut()
+    fun signOut(setResult: (user: UserEntity?) -> Unit, setError: (error: String) -> Unit)
 }
