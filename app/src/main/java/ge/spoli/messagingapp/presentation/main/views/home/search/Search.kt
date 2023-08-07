@@ -1,12 +1,16 @@
 package ge.spoli.messagingapp.presentation.main.views.home.search
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.constraintlayout.widget.ConstraintLayout
+import ge.spoli.messagingapp.common.Utils
 import ge.spoli.messagingapp.databinding.SearchLayoutBinding
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.MainScope
@@ -16,6 +20,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+
 
 @OptIn(FlowPreview::class)
 class Search @JvmOverloads constructor(
@@ -36,6 +41,14 @@ class Search @JvmOverloads constructor(
         } else {
             ""
         }
+        binding.input.setOnKeyListener(OnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                Utils.hideSoftKeyboard(getActivity())
+                binding.input.clearFocus()
+                return@OnKeyListener true
+            }
+            false
+        })
         binding
             .input
             .onChange()
@@ -65,6 +78,19 @@ class Search @JvmOverloads constructor(
 
     fun setRequestListener(listener: RequestListener) {
         requestListener = listener
+    }
+
+    //https://stackoverflow.com/questions/8276634/how-to-get-hosting-activity-from-a-view/32973351#32973351
+    // Needed to remove focus from search keyboard on enter key press
+    private fun getActivity(): Activity? {
+        var context = context
+        while (context is ContextWrapper) {
+            if (context is Activity) {
+                return context
+            }
+            context = context.baseContext
+        }
+        return null
     }
 
 }

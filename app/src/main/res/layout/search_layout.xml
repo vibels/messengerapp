@@ -17,6 +17,7 @@
         android:drawableStart="@drawable/baseline_search_24"
         android:drawablePadding="@dimen/dimen_xxs"
         android:hint="@string/search"
+        android:singleLine="true"
         android:paddingHorizontal="@dimen/search_padding"
         android:textColor="@color/gray_default_dark"
         android:textColorHint="@color/gray_default"
