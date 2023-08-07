@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,10 +23,10 @@ import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import com.bumptech.glide.request.target.Target
-import ge.spoli.messagingapp.R
 import ge.spoli.messagingapp.common.BitmapTransform
 import ge.spoli.messagingapp.common.Constants
 import ge.spoli.messagingapp.common.GlideApp
+import ge.spoli.messagingapp.common.Utils.Companion.hideSoftKeyboard
 import ge.spoli.messagingapp.databinding.FragmentProfileBinding
 import ge.spoli.messagingapp.domain.user.UserEntity
 import ge.spoli.messagingapp.presentation.main.viewmodel.MainViewModel
@@ -83,6 +84,15 @@ class ProfileFragment : Fragment() {
             Firebase.auth.signOut()
             logout()
         }
+
+        binding.jobInfo.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                hideSoftKeyboard(activity)
+                binding.jobInfo.clearFocus()
+                return@OnKeyListener true
+            }
+            false
+        })
 
     }
 
@@ -150,6 +160,7 @@ class ProfileFragment : Fragment() {
 
     private fun logout() {
         requireActivity().finish()
+        mainViewModel.sign_out()
     }
 
     private fun loggedUserUpdated(user: UserEntity) {

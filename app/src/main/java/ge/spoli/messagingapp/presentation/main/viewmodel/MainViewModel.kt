@@ -44,5 +44,12 @@ class MainViewModel @Inject constructor(val userRepository: UserRepository): Vie
         }
     }
 
+    fun sign_out() {
+        viewModelScope.launch {
+            delay(500)
+            userRepository.signOut()
+        }
+    }
+
 
 }

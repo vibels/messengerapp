@@ -31,12 +31,21 @@
             android:contentDescription="@string/profile_picture" />
     </androidx.cardview.widget.CardView>
 
+    <!--    Dummy view for unfocusing on enter for last visible view -->
+    <View
+        android:id="@+id/dummy"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="@dimen/username_height"
         android:layout_marginHorizontal="@dimen/dimen_l"
         android:layout_marginTop="@dimen/dimen_xxl"
+        android:singleLine="true"
         android:background="@drawable/background_rectangle_aqua"
         android:hint="@string/username"
         android:gravity="center"
@@ -49,6 +58,7 @@
         android:layout_height="@dimen/username_height"
         android:layout_marginHorizontal="@dimen/dimen_l"
         android:layout_marginTop="@dimen/dimen_s"
+        android:singleLine="true"
         android:background="@drawable/background_rectangle_aqua"
         android:gravity="center"
         android:hint="@string/job_info"

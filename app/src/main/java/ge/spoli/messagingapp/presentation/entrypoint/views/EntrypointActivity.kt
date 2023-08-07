@@ -1,11 +1,9 @@
 package ge.spoli.messagingapp.presentation.entrypoint.views
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +11,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import ge.spoli.messagingapp.R
+import ge.spoli.messagingapp.common.Utils.Companion.hideSoftKeyboard
 import ge.spoli.messagingapp.databinding.ActivityEntrypointBinding
 import ge.spoli.messagingapp.presentation.main.views.MainActivity
 import ge.spoli.messagingapp.presentation.entrypoint.viewmodels.EntryViewModel
@@ -36,8 +35,8 @@ class EntrypointActivity : AppCompatActivity() {
                 showError(it)
             }
         }
-        entryViewModel.entryStatus.observe(this) {
-            if (it != null) {
+        entryViewModel.entryId.observe(this) {
+            if (it != null && Firebase.auth.currentUser?.uid.equals(it)) {
                 setLoading(false)
                 startMainActivity()
             }
@@ -168,14 +167,6 @@ class EntrypointActivity : AppCompatActivity() {
     private fun showError(error: String) {
         setLoading(false)
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun hideSoftKeyboard(activity: Activity?) {
-        if (activity == null) return
-        if (activity.currentFocus == null) return
-        val inputMethodManager =
-            activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
     }
 
 }

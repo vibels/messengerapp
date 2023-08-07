@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ge.spoli.messagingapp.common.Constants
 import ge.spoli.messagingapp.presentation.entrypoint.views.EntrypointActivity
 import ge.spoli.messagingapp.presentation.user.model.UserRepository
 import kotlinx.coroutines.delay
@@ -16,13 +15,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EntryViewModel @Inject constructor(val userRepository: UserRepository): ViewModel() {
-    private var _entryStatus = MutableLiveData<Boolean>()
+    private var _entryId = MutableLiveData<String>()
     private var _entrypointError = MutableLiveData<String>()
-    val entryStatus: LiveData<Boolean> get() = _entryStatus
+    val entryId: LiveData<String> get() = _entryId
     val entrypointError: LiveData<String> get() = _entrypointError
 
-    private fun setEntryStatus(code: Int) {
-        _entryStatus.postValue(code == Constants.SUCCESS)
+    private fun setEntryId(id: String) {
+        _entryId.postValue(id)
     }
 
     private fun setError(error: String) {
@@ -32,7 +31,7 @@ class EntryViewModel @Inject constructor(val userRepository: UserRepository): Vi
     private fun getUser(id: String) {
         viewModelScope.launch {
             delay(500)
-            userRepository.fetchUser(id, ::setEntryStatus, ::setError)
+            userRepository.fetchUser(id, ::setEntryId, ::setError)
         }
     }
 

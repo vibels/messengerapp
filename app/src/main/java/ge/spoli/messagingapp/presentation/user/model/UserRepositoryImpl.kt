@@ -10,7 +10,7 @@ import ge.spoli.messagingapp.domain.user.UserEntity
 
 class UserRepositoryImpl : UserRepository {
 
-    private lateinit var user: UserEntity
+    private var user: UserEntity? = null
 
     init {
         Firebase.database.setPersistenceEnabled(true)
@@ -27,7 +27,11 @@ class UserRepositoryImpl : UserRepository {
         setResult: (user: UserEntity) -> Unit,
         setError: (error: String) -> Unit
     ) {
-        setResult(user)
+        if (user == null) {
+            setError("No logged in user found")
+            return
+        }
+        setResult(user!!)
     }
 
     override fun updateUser(
@@ -57,24 +61,28 @@ class UserRepositoryImpl : UserRepository {
         }
     }
 
+    override fun signOut() {
+        user = null
+    }
+
     private fun continueUpdate(username: String, jobInfo: String, profile: String, setResult: (user: UserEntity) -> Unit, setError: (error: String) -> Unit) {
-        if (username != user.username) {
+        if (username != user?.username) {
             Firebase.auth.currentUser?.updateEmail("$username@dummy.email")
                 ?.addOnSuccessListener {
-                    saveInternal(user.id, username, jobInfo, profile, setError, setResult)
+                    saveInternal(user?.id, username, jobInfo, profile, setError, setResult)
                 }
         } else {
-            saveInternal(user.id, username, jobInfo, profile, setError, setResult)
+            saveInternal(user?.id, username, jobInfo, profile, setError, setResult)
         }
     }
     override fun fetchUser(
         id: String,
-        setResult: (code: Int) -> Unit,
+        setResult: (id: String) -> Unit,
         setError: (error: String) -> Unit
     ) {
         try {
-            if (this::user.isInitialized && user.id == id) {
-                setResult(Constants.SUCCESS)
+            if (user?.id == id) {
+                setResult(id)
             }
             val database = Firebase.database
             val usersReference = database.getReference(USERS)
@@ -89,7 +97,7 @@ class UserRepositoryImpl : UserRepository {
                         userInfo[JOB_INFO].toString(),
                         userInfo[PROFILE].toString(),
                     )
-                    setResult(Constants.SUCCESS)
+                    setResult(id)
                 }.addOnFailureListener {
                     setError("Error occured during db connection")
                 }
@@ -110,13 +118,17 @@ class UserRepositoryImpl : UserRepository {
     }
 
     private fun saveInternal(
-        id: String,
+        id: String?,
         username: String,
         jobInfo: String,
         profile: String,
         setError: (error: String) -> Unit,
         setResult: ((user: UserEntity) -> Unit)? = null,
     ) {
+        if (id == null) {
+            setError( "Id should not be null during saving")
+            return
+        }
         try {
             val database = Firebase.database
             val usersReference = database.getReference(USERS)
@@ -133,7 +145,7 @@ class UserRepositoryImpl : UserRepository {
             val updated = UserEntity(id, username, jobInfo, profile)
             user = updated
             if (setResult != null) {
-                setResult(user)
+                setResult(user!!)
             }
         } catch (ex: Exception) {
             setError(ex.message ?: "Unexpected error occurred")
