@@ -15,4 +15,6 @@
     <string name="profile_picture">Picture for profile</string>
     <string name="update">UPDATE</string>
     <string name="sign_out">SIGN OUT</string>
+    <string name="top_bar_image_description">Top bar image</string>
+    <string name="search">Search</string>
 </resources>

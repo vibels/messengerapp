@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        android:id="@+id/loading_pb"
+        android:id="@+id/loading"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

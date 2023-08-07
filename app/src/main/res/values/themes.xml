@@ -15,9 +15,9 @@
         <item name="colorControlNormal">@color/navigation_bar_color</item>
     </style>
 
-    <style name="Theme.MessagingApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.MessagingApp.TopBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.MessagingApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.MessagingApp.Toolbar" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>

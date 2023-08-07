@@ -3,14 +3,12 @@ package ge.spoli.messagingapp.presentation.main.views
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
 import ge.spoli.messagingapp.presentation.main.views.profile.ProfileFragment
 import ge.spoli.messagingapp.R
 import ge.spoli.messagingapp.databinding.ActivityMainBinding
-import ge.spoli.messagingapp.presentation.main.viewmodel.MainViewModel
-import ge.spoli.messagingapp.presentation.main.views.home.HomeFragment
+import ge.spoli.messagingapp.presentation.main.views.home.HomePageFragment
 import ge.spoli.messagingapp.presentation.user.views.UserActivity
 import kotlin.Exception
 
@@ -22,11 +20,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        switch(HomeFragment())
+        switch(HomePageFragment())
 
         binding.navigation.setOnItemSelectedListener {
             if (it.itemId == R.id.home) {
-                switch(HomeFragment())
+                switch(HomePageFragment())
                 return@setOnItemSelectedListener true
             }
             if (it.itemId == R.id.profile) {

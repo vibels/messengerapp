@@ -84,7 +84,7 @@ class ProfileFragment : Fragment() {
         }
         binding.signOutButton.setOnClickListener {
             Firebase.auth.signOut()
-            mainViewModel.sign_out()
+            mainViewModel.signOut()
         }
 
         binding.jobInfo.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->

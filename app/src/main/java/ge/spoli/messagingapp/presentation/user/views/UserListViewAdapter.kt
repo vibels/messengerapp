@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ge.spoli.messagingapp.common.Constants
+import ge.spoli.messagingapp.databinding.ListLoadingBinding
 import ge.spoli.messagingapp.databinding.UserListEntryBinding
-import ge.spoli.messagingapp.databinding.UserListLoadingBinding
 import ge.spoli.messagingapp.domain.user.UserEntity
 import ge.spoli.messagingapp.presentation.user.views.viewholders.UserListEntryViewHolder
 import ge.spoli.messagingapp.presentation.user.views.viewholders.UserListLoadingViewHolder
@@ -22,7 +22,7 @@ class UserListViewAdapter(private var userActivity: UserActivity): RecyclerView.
         return if (viewType == Constants.LOADING) {
             UserListEntryViewHolder(UserListEntryBinding.inflate(inflater, parent, false))
         } else {
-            UserListLoadingViewHolder(UserListLoadingBinding.inflate(inflater, parent, false))
+            UserListLoadingViewHolder(ListLoadingBinding.inflate(inflater, parent, false))
         }
     }
 

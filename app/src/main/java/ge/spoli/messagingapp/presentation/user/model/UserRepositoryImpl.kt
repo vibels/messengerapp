@@ -2,15 +2,21 @@ package ge.spoli.messagingapp.presentation.user.model
 
 import android.net.Uri
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import ge.spoli.messagingapp.common.Constants
+import ge.spoli.messagingapp.domain.chat.HomePageMessage
 import ge.spoli.messagingapp.domain.user.UserEntity
+import java.util.Collections.synchronizedList
 
 class UserRepositoryImpl : UserRepository {
 
     private var user: UserEntity? = null
+    private var cachedUsers = synchronizedList(mutableListOf<HomePageMessage>())
 
     init {
         Firebase.database.setPersistenceEnabled(true)
@@ -21,14 +27,15 @@ class UserRepositoryImpl : UserRepository {
         const val USERNAME = "username"
         const val JOB_INFO = "job_info"
         const val PROFILE = "profile"
+        const val MESSAGE = "message"
+        const val MESSAGES = "messages"
     }
 
     override fun getUser(
         setResult: (user: UserEntity) -> Unit,
         setError: (error: String) -> Unit
     ) {
-        if (user == null) {
-            setError("No logged in user found")
+        if (!validateLoggedUser(setError)) {
             return
         }
         setResult(user!!)
@@ -42,6 +49,9 @@ class UserRepositoryImpl : UserRepository {
         setResult: (user: UserEntity) -> Unit,
         setError: (error: String) -> Unit
     ) {
+        if (!validateLoggedUser(setError)) {
+            return
+        }
         try {
             var profValue = profile
             if (profValue == null) {
@@ -50,7 +60,10 @@ class UserRepositoryImpl : UserRepository {
                 val ref = Firebase.storage.reference.child(profValue)
                 val task = ref.putFile(data)
                 task.addOnFailureListener {
-                    setError(it.message ?: "Failure uploading picture, ideally should reset profile, but it's out of scope")
+                    setError(
+                        it.message
+                            ?: "Failure uploading picture, ideally should reset profile, but it's out of scope"
+                    )
                 }.addOnSuccessListener {
                     continueUpdate(username, jobInfo, profValue, setResult, setError)
                 }
@@ -61,22 +74,76 @@ class UserRepositoryImpl : UserRepository {
         }
     }
 
-    override fun signOut(setResult: (user: UserEntity?) -> Unit,
-                         setError: (error: String) -> Unit) {
+    override fun signOut(
+        setResult: (user: UserEntity?) -> Unit,
+        setError: (error: String) -> Unit
+    ) {
         user = null
         setResult(null)
     }
 
-    private fun continueUpdate(username: String, jobInfo: String, profile: String, setResult: (user: UserEntity) -> Unit, setError: (error: String) -> Unit) {
-        if (username != user?.username) {
-            Firebase.auth.currentUser?.updateEmail("$username@dummy.email")
-                ?.addOnSuccessListener {
-                    saveInternal(user?.id, username, jobInfo, profile, setError, setResult)
+    override fun getMessages(
+        input: String,
+        setResult: (messages: List<HomePageMessage>) -> Unit,
+        setError: (error: String) -> Unit
+    ) {
+        if (!validateLoggedUser(setError)) {
+            return
+        }
+        val messagesRef = Firebase.database.getReference(MESSAGES)
+
+        val id = user?.id
+
+        messagesRef
+            .orderByKey()
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.value == null) {
+                        setResult(emptyList())
+                        return
+                    }
+
+                    val chats = (dataSnapshot.value as HashMap<*, *>)
+                        .filter { (it.key as String).contains(id!!) }
+                    val messages = chats
+                        .toList()
+                        .map { entry ->
+                            mapChatToMessages(entry, id!!)
+                        }
+                    updateLastMessages(setResult, messages, input)
                 }
-        } else {
-            saveInternal(user?.id, username, jobInfo, profile, setError, setResult)
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    setError(databaseError.message)
+                }
+            })
+    }
+
+    override fun fillDestinationInfo(
+        message: HomePageMessage,
+        setResult: (message: HomePageMessage) -> Unit,
+        setError: (error: String) -> Unit
+    ) {
+        val userRef = Firebase.database.getReference(USERS).child(message.id)
+
+        userRef.get().addOnSuccessListener {
+            val userMap = (it.value as HashMap<*, *>)
+            val messageFilled = HomePageMessage(
+                id = message.id,
+                message = message.message,
+                profile = userMap[PROFILE].toString(),
+                date = message.date,
+                username = userMap[USERNAME].toString(),
+                jobInfo = userMap[JOB_INFO].toString(),
+            )
+            val indexOfDestination = cachedUsers.indexOfFirst { user -> user.id == message.id }
+            cachedUsers[indexOfDestination] = messageFilled
+            setResult(messageFilled)
+        }.addOnFailureListener {
+            setError(it.message ?: "Unexpected error occurred")
         }
     }
+
     override fun fetchUser(
         id: String,
         setResult: (id: String) -> Unit,
@@ -106,8 +173,6 @@ class UserRepositoryImpl : UserRepository {
         } catch (ex: Exception) {
             setError(ex.message ?: "Unexpected error occurred")
         }
-
-
     }
 
     override fun save(
@@ -119,6 +184,60 @@ class UserRepositoryImpl : UserRepository {
         saveInternal(id, username, jobInfo, Constants.DEFAULT_PROFILE, setError)
     }
 
+    private fun mapChatToMessages(messageEntry: Pair<Any, Any>, id: String): HomePageMessage {
+        val messageLabel = messageEntry.first.toString()
+        val destinationId = messageLabel.split("-").filter { it != id }[0]
+        val lastMessageEntry = (messageEntry.second as HashMap<*, *>)
+            .entries.maxByOrNull { entry ->
+                entry.key.toString()
+            }!!
+
+        val lastMessage = (lastMessageEntry.value as HashMap<*, *>)
+        val destinationUser =
+            cachedUsers.firstOrNull { user -> user.id == destinationId }
+        val message = HomePageMessage(
+            destinationId,
+            lastMessage[MESSAGE].toString(),
+            destinationUser?.profile,
+            lastMessageEntry.key.toString().toLong(),
+            destinationUser?.username,
+            destinationUser?.jobInfo
+        )
+        val found =
+            cachedUsers.indexOfFirst { user -> user.id == destinationId }
+        if (found != -1) {
+            cachedUsers[found] = message
+        } else {
+            cachedUsers.add(message)
+        }
+        return message
+    }
+
+    private fun continueUpdate(
+        username: String,
+        jobInfo: String,
+        profile: String,
+        setResult: (user: UserEntity) -> Unit,
+        setError: (error: String) -> Unit
+    ) {
+        if (username != user?.username) {
+            Firebase.auth.currentUser?.updateEmail("$username@dummy.email")
+                ?.addOnSuccessListener {
+                    saveInternal(user?.id, username, jobInfo, profile, setError, setResult)
+                }
+        } else {
+            saveInternal(user?.id, username, jobInfo, profile, setError, setResult)
+        }
+    }
+
+    private fun updateLastMessages(
+        setResult: (messages: List<HomePageMessage>) -> Unit,
+        messages: List<HomePageMessage>,
+        input: String
+    ) {
+        setResult(messages.filter { it.username == null || it.username.contains(input) })
+    }
+
     private fun saveInternal(
         id: String?,
         username: String,
@@ -128,7 +247,7 @@ class UserRepositoryImpl : UserRepository {
         setResult: ((user: UserEntity) -> Unit)? = null,
     ) {
         if (id == null) {
-            setError( "Id should not be null during saving")
+            setError("Id should not be null during saving")
             return
         }
         try {
@@ -153,5 +272,13 @@ class UserRepositoryImpl : UserRepository {
             setError(ex.message ?: "Unexpected error occurred")
         }
 
+    }
+
+    private fun validateLoggedUser(setError: (error: String) -> Unit): Boolean {
+        if (user?.id.isNullOrBlank()) {
+            setError("User not logged in")
+            return false
+        }
+        return true
     }
 }
