@@ -1,4 +1,4 @@
-package ge.spoli.messagingapp.presentation.user.model
+package ge.spoli.messagingapp.domain
 
 
 import android.net.Uri

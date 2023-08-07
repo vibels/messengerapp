@@ -7,8 +7,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ge.spoli.messagingapp.presentation.MessagingApp
-import ge.spoli.messagingapp.presentation.user.model.UserRepository
-import ge.spoli.messagingapp.presentation.user.model.UserRepositoryImpl
+import ge.spoli.messagingapp.domain.UserRepository
+import ge.spoli.messagingapp.model.UserRepositoryImpl
 import javax.inject.Singleton
 
 @Module

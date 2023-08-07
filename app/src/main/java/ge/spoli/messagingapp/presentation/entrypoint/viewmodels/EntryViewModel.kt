@@ -8,7 +8,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.spoli.messagingapp.presentation.entrypoint.views.EntrypointActivity
-import ge.spoli.messagingapp.presentation.user.model.UserRepository
+import ge.spoli.messagingapp.domain.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject

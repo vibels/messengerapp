@@ -1,4 +1,4 @@
-package ge.spoli.messagingapp.presentation.user.model
+package ge.spoli.messagingapp.model
 
 import android.net.Uri
 import com.google.firebase.auth.ktx.auth
@@ -9,6 +9,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import ge.spoli.messagingapp.common.Constants
+import ge.spoli.messagingapp.domain.UserRepository
 import ge.spoli.messagingapp.domain.chat.HomePageMessage
 import ge.spoli.messagingapp.domain.user.UserEntity
 import java.util.Collections.synchronizedList

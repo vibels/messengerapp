@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.spoli.messagingapp.domain.chat.HomePageMessage
 import ge.spoli.messagingapp.domain.user.UserEntity
-import ge.spoli.messagingapp.presentation.user.model.UserRepository
+import ge.spoli.messagingapp.domain.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
