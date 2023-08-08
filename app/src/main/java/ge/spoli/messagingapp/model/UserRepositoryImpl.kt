@@ -129,6 +129,7 @@ class UserRepositoryImpl : UserRepository {
         try {
             if (user?.id == id) {
                 setResult(id)
+                return
             }
             val database = Firebase.database
             val usersReference = database.getReference(USERS)
@@ -202,18 +203,15 @@ class UserRepositoryImpl : UserRepository {
             return
         }
         try {
-            val database = Firebase.database
-            val usersReference = database.getReference(USERS)
-            val userReference = usersReference.child(id)
+            val ref = Firebase.database.getReference(USERS).child(id)
 
-            userReference.child(JOB_INFO).setValue(jobInfo)
-                .continueWithTask {
-                    userReference.child(PROFILE).setValue(profile)
-                }.continueWithTask {
-                    userReference.child(USERNAME).setValue(username)
-                }.addOnFailureListener {
-                    setError(it.message ?: "Something went wrong")
+            val postValues = mapOf(JOB_INFO to jobInfo, PROFILE to profile, USERNAME to username)
+
+            ref.updateChildren(postValues)
+                .addOnFailureListener {
+                    setError(it.message ?: "Unexpected error occurred")
                 }
+
             val updated = UserEntity(id, username, jobInfo, profile)
             user = updated
             if (setResult != null) {
