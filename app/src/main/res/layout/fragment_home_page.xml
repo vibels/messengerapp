@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
+            android:minHeight="@dimen/message_input_height"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true">
 
@@ -37,7 +38,8 @@
                 android:id="@+id/toolbarId"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/search_height"
-                android:layout_marginBottom="@dimen/dimen_l"
+                android:layout_marginTop="@dimen/dimen_s"
+                android:layout_marginBottom="@dimen/margin_nav_bar"
                 android:layout_gravity="bottom"
                 app:popupTheme="@style/Theme.MessagingApp.Toolbar">
 
@@ -66,7 +68,7 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <ProgressBar
         android:id="@+id/home_progress_bar"

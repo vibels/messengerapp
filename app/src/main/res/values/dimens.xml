@@ -21,10 +21,10 @@
     <dimen name="navigation_bar_height">55dp</dimen>
     <dimen name="navigation_bar_margin">55dp</dimen>
     <dimen name="button_text">18sp</dimen>
-    <dimen name="margin_nav_bar">100dp</dimen>
+    <dimen name="margin_nav_bar">60dp</dimen>
     <dimen name="profile_default_radius">75dp</dimen>
-    <dimen name="top_bar_height">150dp</dimen>
-    <dimen name="top_bar_background">150dp</dimen>
+    <dimen name="top_bar_height">200dp</dimen>
+    <dimen name="top_bar_background">200dp</dimen>
     <dimen name="search_height">37dp</dimen>
     <dimen name="search_background_height">85dp</dimen>
     <dimen name="search_padding">15dp</dimen>
