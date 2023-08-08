@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ge.spoli.messagingapp.common.MutableLiveQueue
 import ge.spoli.messagingapp.domain.MessageRepository
 import ge.spoli.messagingapp.domain.chat.ChatMessage
 import ge.spoli.messagingapp.domain.chat.HomePageMessage
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(val messageRepository: MessageRepository): ViewModel() {
     private var _homePageMessages = MutableLiveData<List<HomePageMessage>>()
     private var _chatMessages = MutableLiveData<List<ChatMessage>>()
-    private var _lastMessage = MutableLiveData<HomePageMessage>()
+    private var _lastMessage = MutableLiveQueue<HomePageMessage>()
     private var _homePageError = MutableLiveData<String>()
     private var _chatError = MutableLiveData<String>()
     private var searchParam: String = ""
