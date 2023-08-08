@@ -127,6 +127,7 @@ class EntrypointActivity : AppCompatActivity() {
     private fun startRegisterFragment() {
         binding.signInButton.visibility = View.GONE
         binding.jobInfo.visibility = View.VISIBLE
+        binding.password.setText("")
         binding.signUpButton.visibility = View.VISIBLE
         binding.register.text = getString(R.string.back_login)
         binding.registerButton.text = getString(R.string.back)

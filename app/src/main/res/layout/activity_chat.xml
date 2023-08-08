@@ -5,6 +5,129 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".presentation.main.views.MainActivity">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chat_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/arrow_back_width"
+            android:layout_height="@dimen/arrow_back_height"
+            android:layout_gravity="center"
+            android:contentDescription="@string/back"
+            android:src="@drawable/baseline_arrow_back_ios_new_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/back"
+            app:layout_constraintEnd_toStartOf="@+id/profile_picture"
+            app:layout_constraintStart_toEndOf="@+id/back"
+            app:layout_constraintTop_toTopOf="@+id/back">
+
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_xxs"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/username_text"
+                android:textStyle="bold"
+                tools:text="Name loading..." />
+
+            <TextView
+                android:id="@+id/jobInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_xxs"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                tools:text="Job info loading..." />
+
+        </LinearLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_picture"
+            android:layout_width="@dimen/chat_profile_picture_width"
+            android:layout_height="@dimen/chat_profile_picture_height"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/dimen_xs"
+            app:cardCornerRadius="@dimen/chat_profile_picture_radius"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/profile_picture_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/profile_picture"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/dimen_s"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toTopOf="@+id/input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chat_layout" />
+
+    <EditText
+        android:id="@+id/input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/message_input_height"
+        android:layout_margin="@dimen/dimen_s"
+        android:background="@drawable/background_rectangle_gray"
+        android:backgroundTint="@color/chat_input_gray"
+        android:hint="@string/message"
+        android:paddingStart="@dimen/dimen_s"
+        android:paddingEnd="@dimen/dimen_xxl"
+        android:textColor="@color/gray"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/chat_text_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:importantForAutofill="no"
+        tools:ignore="TextFields" />
+
+    <ImageView
+        android:id="@+id/send"
+        android:layout_width="@dimen/dimen_m"
+        android:layout_height="@dimen/dimen_m"
+        android:layout_marginEnd="@dimen/dimen_xs"
+        android:src="@drawable/baseline_east_24"
+        app:layout_constraintBottom_toBottomOf="@+id/input"
+        app:layout_constraintEnd_toEndOf="@+id/input"
+        app:layout_constraintTop_toTopOf="@+id/input"
+        android:contentDescription="@string/send_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

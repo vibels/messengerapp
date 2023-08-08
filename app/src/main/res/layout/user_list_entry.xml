@@ -2,10 +2,57 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/profile_picture"
+        android:layout_width="@dimen/home_profile_picture_width"
+        android:layout_height="@dimen/home_profile_picture_height"
+        app:cardCornerRadius="@dimen/home_profile_picture_radius"
+        android:layout_marginTop="@dimen/dimen_xs"
+        android:layout_marginStart="@dimen/dimen_xxs"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/profile_picture_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/avatar_image_placeholder"
+            android:contentDescription="@string/profile_picture" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_xs"
+        android:layout_marginTop="@dimen/dimen_xs"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/profile_picture"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Username loading..." />
+
+    <TextView
+        android:id="@+id/jobInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_xs"
+        android:layout_marginTop="@dimen/dimen_xxs"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/dark_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profile_picture"
+        app:layout_constraintTop_toBottomOf="@+id/username"
+        tools:text="Job info loading..." />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

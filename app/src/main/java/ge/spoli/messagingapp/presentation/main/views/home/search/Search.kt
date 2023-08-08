@@ -32,11 +32,12 @@ class Search @JvmOverloads constructor(
 
     private val binding = SearchLayoutBinding.inflate(LayoutInflater.from(context), this)
     private var requestListener: RequestListener? = null
-    private var searchParam = ""
+    var searchParam = ""
 
     init {
         val scope = MainScope()
-        searchParam = if ((binding.input.text?.length ?: 0) > 2) {
+        val length = binding.input.text?.length ?: 0
+        searchParam = if (length > 2) {
             binding.input.text.toString()
         } else {
             ""
@@ -63,9 +64,12 @@ class Search @JvmOverloads constructor(
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val length = s?.length
-                if (length != null && length > 2) {
-                    trySend(s.toString()).isSuccess
+                if (length == null) {
+                    searchParam = ""
+                } else if (length > 2 || length == 0) {
+                    searchParam = s.toString()
                 }
+                trySend(searchParam).isSuccess
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

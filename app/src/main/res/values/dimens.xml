@@ -33,4 +33,14 @@
     <dimen name="home_profile_picture_width">50dp</dimen>
     <dimen name="home_profile_picture_height">50dp</dimen>
     <dimen name="home_profile_picture_radius">50dp</dimen>
+    <dimen name="arrow_back_height">60dp</dimen>
+    <dimen name="arrow_back_width">60dp</dimen>
+    <dimen name="username_text">23sp</dimen>
+    <dimen name="chat_profile_picture_height">50dp</dimen>
+    <dimen name="chat_profile_picture_width">50dp</dimen>
+    <dimen name="chat_profile_picture_radius">50dp</dimen>
+    <dimen name="message_input_height">48dp</dimen>
+    <dimen name="chat_text_size">15sp</dimen>
+    <dimen name="text_not_found">24sp</dimen>
+    <dimen name="chat_message_radius">150dp</dimen>
 </resources>

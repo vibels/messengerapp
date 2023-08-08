@@ -1,5 +1,6 @@
 package ge.spoli.messagingapp.presentation.user.views
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,9 +21,9 @@ class UserListViewAdapter(private var userActivity: UserActivity): RecyclerView.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return if (viewType == Constants.LOADING) {
-            UserListEntryViewHolder(UserListEntryBinding.inflate(inflater, parent, false))
-        } else {
             UserListLoadingViewHolder(ListLoadingBinding.inflate(inflater, parent, false))
+        } else {
+            UserListEntryViewHolder(UserListEntryBinding.inflate(inflater, parent, false))
         }
     }
 
@@ -40,12 +41,13 @@ class UserListViewAdapter(private var userActivity: UserActivity): RecyclerView.
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (position < users.size) {
+        if (!loading && position < users.size) {
             holder as UserListEntryViewHolder
             holder.update(users[position], userActivity)
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateLoading() {
         if(!loading) {
             loading = true
@@ -58,6 +60,7 @@ class UserListViewAdapter(private var userActivity: UserActivity): RecyclerView.
         append(updatedUsers)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun append(updatedUsers: List<UserEntity>) {
         loading = false
         users.addAll(updatedUsers)

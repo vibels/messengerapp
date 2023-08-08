@@ -28,14 +28,13 @@
 
     <TextView
         android:id="@+id/username"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dimen_xs"
         android:layout_marginTop="@dimen/dimen_xs"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/message_date"
         app:layout_constraintStart_toEndOf="@+id/profile_picture"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Username loading..." />

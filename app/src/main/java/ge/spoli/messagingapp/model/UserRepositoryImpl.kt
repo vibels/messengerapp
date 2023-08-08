@@ -10,14 +10,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import ge.spoli.messagingapp.common.Constants
 import ge.spoli.messagingapp.domain.UserRepository
-import ge.spoli.messagingapp.domain.chat.HomePageMessage
 import ge.spoli.messagingapp.domain.user.UserEntity
-import java.util.Collections.synchronizedList
 
 class UserRepositoryImpl : UserRepository {
 
     private var user: UserEntity? = null
-    private var cachedUsers = synchronizedList(mutableListOf<HomePageMessage>())
 
     init {
         Firebase.database.setPersistenceEnabled(true)
@@ -28,8 +25,6 @@ class UserRepositoryImpl : UserRepository {
         const val USERNAME = "username"
         const val JOB_INFO = "job_info"
         const val PROFILE = "profile"
-        const val MESSAGE = "message"
-        const val MESSAGES = "messages"
     }
 
     override fun getUser(
@@ -83,65 +78,46 @@ class UserRepositoryImpl : UserRepository {
         setResult(null)
     }
 
-    override fun getMessages(
-        input: String,
-        setResult: (messages: List<HomePageMessage>) -> Unit,
-        setError: (error: String) -> Unit
+    override fun loadUsers(
+        searchParam: String,
+        setWholeData: (users: List<UserEntity>) -> Unit,
+        setUpdateData: (users: List<UserEntity>) -> Unit,
+        setError: (error: String) -> Unit,
+        lastUserName: String?
     ) {
-        if (!validateLoggedUser(setError)) {
+        if (searchParam.length < 3 && searchParam.isNotEmpty()) {
             return
-        }
-        val messagesRef = Firebase.database.getReference(MESSAGES)
+        } else {
+            var usersRef = Firebase.database.getReference(USERS).orderByChild(USERNAME)
+            if (!lastUserName.isNullOrBlank()) {
+                usersRef = usersRef.startAfter(lastUserName)
+            }
+            usersRef
+                .limitToFirst(5).addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.value != null) {
+                            val users = (snapshot.value as HashMap<*, *>)
+                            val list = users.entries.map { userEntry -> mapToUserEntity(userEntry) }
+                                .filter { entry ->
+                                    entry.id != user?.id && entry.username.contains(searchParam)
+                                }.sortedBy { user -> user.username }
 
-        val id = user?.id
-
-        messagesRef
-            .orderByKey()
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.value == null) {
-                        setResult(emptyList())
-                        return
+                            if (!lastUserName.isNullOrBlank()) {
+                                setUpdateData(list)
+                            } else {
+                                setWholeData(list)
+                            }
+                        } else {
+                            setUpdateData(emptyList())
+                        }
                     }
 
-                    val chats = (dataSnapshot.value as HashMap<*, *>)
-                        .filter { (it.key as String).contains(id!!) }
-                    val messages = chats
-                        .toList()
-                        .map { entry ->
-                            mapChatToMessages(entry, id!!)
-                        }
-                    updateLastMessages(setResult, messages, input)
-                }
+                    override fun onCancelled(error: DatabaseError) {
+                        setError(error.message)
+                    }
+                })
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    setError(databaseError.message)
-                }
-            })
-    }
 
-    override fun fillDestinationInfo(
-        message: HomePageMessage,
-        setResult: (message: HomePageMessage) -> Unit,
-        setError: (error: String) -> Unit
-    ) {
-        val userRef = Firebase.database.getReference(USERS).child(message.id)
-
-        userRef.get().addOnSuccessListener {
-            val userMap = (it.value as HashMap<*, *>)
-            val messageFilled = HomePageMessage(
-                id = message.id,
-                message = message.message,
-                profile = userMap[PROFILE].toString(),
-                date = message.date,
-                username = userMap[USERNAME].toString(),
-                jobInfo = userMap[JOB_INFO].toString(),
-            )
-            val indexOfDestination = cachedUsers.indexOfFirst { user -> user.id == message.id }
-            cachedUsers[indexOfDestination] = messageFilled
-            setResult(messageFilled)
-        }.addOnFailureListener {
-            setError(it.message ?: "Unexpected error occurred")
         }
     }
 
@@ -185,33 +161,15 @@ class UserRepositoryImpl : UserRepository {
         saveInternal(id, username, jobInfo, Constants.DEFAULT_PROFILE, setError)
     }
 
-    private fun mapChatToMessages(messageEntry: Pair<Any, Any>, id: String): HomePageMessage {
-        val messageLabel = messageEntry.first.toString()
-        val destinationId = messageLabel.split("-").filter { it != id }[0]
-        val lastMessageEntry = (messageEntry.second as HashMap<*, *>)
-            .entries.maxByOrNull { entry ->
-                entry.key.toString()
-            }!!
-
-        val lastMessage = (lastMessageEntry.value as HashMap<*, *>)
-        val destinationUser =
-            cachedUsers.firstOrNull { user -> user.id == destinationId }
-        val message = HomePageMessage(
-            destinationId,
-            lastMessage[MESSAGE].toString(),
-            destinationUser?.profile,
-            lastMessageEntry.key.toString().toLong(),
-            destinationUser?.username,
-            destinationUser?.jobInfo
+    private fun mapToUserEntity(user: MutableMap.MutableEntry<out Any, out Any>): UserEntity {
+        val id = user.key
+        val mp = (user.value as HashMap<*, *>)
+        return UserEntity(
+            id.toString(),
+            mp[USERNAME].toString(),
+            mp[JOB_INFO].toString(),
+            mp[PROFILE].toString(),
         )
-        val found =
-            cachedUsers.indexOfFirst { user -> user.id == destinationId }
-        if (found != -1) {
-            cachedUsers[found] = message
-        } else {
-            cachedUsers.add(message)
-        }
-        return message
     }
 
     private fun continueUpdate(
@@ -229,14 +187,6 @@ class UserRepositoryImpl : UserRepository {
         } else {
             saveInternal(user?.id, username, jobInfo, profile, setError, setResult)
         }
-    }
-
-    private fun updateLastMessages(
-        setResult: (messages: List<HomePageMessage>) -> Unit,
-        messages: List<HomePageMessage>,
-        input: String
-    ) {
-        setResult(messages.filter { it.username == null || it.username.contains(input) })
     }
 
     private fun saveInternal(

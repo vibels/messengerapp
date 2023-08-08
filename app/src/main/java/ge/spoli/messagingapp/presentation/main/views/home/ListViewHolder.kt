@@ -1,3 +1,5 @@
+package ge.spoli.messagingapp.presentation.main.views.home
+
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -6,6 +8,7 @@ import ge.spoli.messagingapp.common.GlideApp
 import ge.spoli.messagingapp.common.convertTimestamp
 import ge.spoli.messagingapp.databinding.HomePageListEntryBinding
 import ge.spoli.messagingapp.domain.chat.HomePageMessage
+import ge.spoli.messagingapp.presentation.chat.views.ChatActivity
 
 class ListViewHolder(
     private val binding: HomePageListEntryBinding
@@ -24,7 +27,8 @@ class ListViewHolder(
         binding.messageDate.text = message.date.convertTimestamp()
 
         binding.root.setOnClickListener {
-//            ChatActivity
+            ChatActivity.startChatActivity(binding.root.context, message.id, message.profile ?: Constants.DEFAULT_PROFILE,
+                message.username ?: "", message.jobInfo ?: "")
         }
     }
 

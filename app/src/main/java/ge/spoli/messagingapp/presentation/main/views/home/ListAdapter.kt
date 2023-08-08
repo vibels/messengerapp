@@ -1,6 +1,5 @@
 package ge.spoli.messagingapp.presentation.main.views.home
 
-import ListViewHolder
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -46,8 +45,9 @@ class ListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    override fun getItemCount(): Int =
-        if (loading) homePageMessages.size + 1 else homePageMessages.size
+    override fun getItemCount(): Int {
+        return homePageMessages.size
+    }
 
     fun setLoading(value: Boolean, notify: Boolean) {
         loading = value

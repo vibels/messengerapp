@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ge.spoli.messagingapp.databinding.FragmentHomePageBinding
 import ge.spoli.messagingapp.domain.chat.HomePageMessage
-import ge.spoli.messagingapp.presentation.main.viewmodel.MainViewModel
+import ge.spoli.messagingapp.presentation.chat.viewmodels.ChatViewModel
 
 @AndroidEntryPoint
 class HomePageFragment :  Fragment() {
-    val mainViewModel: MainViewModel by activityViewModels()
+    val viewModel: ChatViewModel by activityViewModels()
     private lateinit var binding: FragmentHomePageBinding
     private val listAdapter = ListAdapter()
 
@@ -29,15 +29,18 @@ class HomePageFragment :  Fragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainViewModel.messages.observe(viewLifecycleOwner) {
+        viewModel.homePageMessages.observe(viewLifecycleOwner) {
+            setLoading(false)
             homePageMessagesLoaded(it)
         }
-        mainViewModel.homePageError.observe(viewLifecycleOwner) {
+        viewModel.homePageError.observe(viewLifecycleOwner) {
+            setLoading(false)
             if (it.isNotEmpty()) {
                 showError(it)
             }
         }
-        mainViewModel.lastMessage.observe(viewLifecycleOwner) {
+        viewModel.lastMessage.observe(viewLifecycleOwner) {
+            setLoading(false)
             messageReceived(it)
         }
         setup()
@@ -49,13 +52,27 @@ class HomePageFragment :  Fragment() {
         binding.list.adapter = listAdapter
 
         binding.search.setRequestListener {
-            mainViewModel.setSearchParam(it)
+            setLoading(true)
+            listAdapter.setLoading(value = true, notify = false)
+            viewModel.setSearchParam(it)
         }
     }
 
     private fun load() {
+        setLoading(true)
         listAdapter.setLoading(value = true, notify = true)
-        mainViewModel.loadLastMessages()
+        viewModel.loadLastMessages()
+    }
+
+    private fun setLoading(value: Boolean) {
+        binding.notFound.visibility = View.GONE
+        if (value) {
+            binding.homeProgressBar.visibility = View.VISIBLE
+            binding.list.visibility = View.GONE
+        } else {
+            binding.homeProgressBar.visibility = View.GONE
+            binding.list.visibility = View.VISIBLE
+        }
     }
 
     private fun showError(error: String) {
@@ -63,11 +80,17 @@ class HomePageFragment :  Fragment() {
     }
 
     private fun homePageMessagesLoaded(messages: List<HomePageMessage>) {
-        listAdapter.setMessages(messages.sortedByDescending { it.date })
-        listAdapter.setPopulationCounter(messages.count { it.username == null })
-        for (message in messages) {
-            if (message.username == null) {
-                mainViewModel.fillDestinationInfo(message)
+        if (messages.isEmpty()) {
+            binding.notFound.visibility = View.VISIBLE
+            binding.list.visibility = View.GONE
+        } else {
+            binding.list.visibility = View.VISIBLE
+            listAdapter.setMessages(messages.sortedByDescending { it.date })
+            listAdapter.setPopulationCounter(messages.count { it.username == null })
+            for (message in messages) {
+                if (message.username == null) {
+                    viewModel.fillDestinationInfo(message)
+                }
             }
         }
     }

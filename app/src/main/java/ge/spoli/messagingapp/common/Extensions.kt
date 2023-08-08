@@ -1,23 +1,23 @@
 package ge.spoli.messagingapp.common
 
-import android.annotation.SuppressLint
-import java.text.SimpleDateFormat
+import android.text.format.DateFormat
 import java.util.*
 
-@SuppressLint("SimpleDateFormat")
-fun Long.convertTimestamp(): String {
-    val formatter: SimpleDateFormat
-    val now = System.currentTimeMillis()
-    val passed = (now - this)
-    if (passed < 60000) {
-        return "1 min"
-    } else if(passed < 60 * 60 * 1000) {
-        formatter = SimpleDateFormat("m min")
-    } else if(passed < 60 * 60 * 24 * 1000) {
-        formatter = SimpleDateFormat("k hours")
-    } else {
-        formatter = SimpleDateFormat("dd MMM")
-    }
 
-    return formatter.format(Date(this))
+fun Long.convertTimestamp(): String {
+    val now = System.currentTimeMillis()
+    val timePassedInSec = now - this
+    return if(timePassedInSec < 60000) {
+        "1 min"
+    } else if(timePassedInSec < 60 * 60000) {
+        val minutes = timePassedInSec / 60000
+        "$minutes min"
+    } else if( timePassedInSec < 60 * 60 * 24000) {
+        val hrs = timePassedInSec / (60 * 60000)
+        "$hrs hours"
+    } else {
+        val calendar = Calendar.getInstance(Locale.ENGLISH)
+        calendar.timeInMillis = this
+        DateFormat.format("dd MMM",calendar).toString()
+    }
 }
