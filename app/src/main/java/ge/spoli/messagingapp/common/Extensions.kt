@@ -4,7 +4,7 @@ import android.text.format.DateFormat
 import java.util.*
 
 
-fun Long.convertTimestamp(): String {
+fun Long.convertToTimePassed(): String {
     val now = System.currentTimeMillis()
     val timePassedInSec = now - this
     return if(timePassedInSec < 60000) {
@@ -20,4 +20,10 @@ fun Long.convertTimestamp(): String {
         calendar.timeInMillis = this
         DateFormat.format("dd MMM",calendar).toString()
     }
+}
+
+fun Long.convertToDate(): String {
+    val calendar = Calendar.getInstance(Locale.ENGLISH)
+    calendar.timeInMillis = this
+    return DateFormat.format("HH:mm",calendar).toString()
 }
